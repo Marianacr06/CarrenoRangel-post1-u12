@@ -1,24 +1,79 @@
 # CarrenoRangel-post1-u12
+# API Catálogo de Productos
 
-Contenerizacion con Docker (multi-stage), Docker Compose y despliegue en Railway.
+Aplicación desarrollada con Spring Boot para la gestión de productos mediante operaciones CRUD.
 
-## Construir imagen
-docker build -t catalogo-app:local .
+---
 
-## Ejecutar con Docker Compose
-docker compose up -d --build
+# URL de despliegue en Railway
 
-## Verificar salud
-curl http://localhost:8080/actuator/health
+https://TU-URL-DE-RAILWAY.up.railway.app
 
-## Railway
-- Conectar el repo en railway.app
-- Agregar PostgreSQL y variables de entorno
-- Generar dominio publico
-- Verificar /actuator/health y endpoints REST
+---
 
-## Evidencias
-Coloca las capturas en img/:
-- img/checkpoint1-docker-build.png
-- img/checkpoint2-compose-health.png
-- img/checkpoint3-railway-endpoints.png
+# Endpoints principales
+
+## Obtener todos los productos
+
+GET `/api/productos`
+
+## Obtener producto por ID
+
+GET `/api/productos/{id}`
+
+## Crear producto
+
+POST `/api/productos`
+
+## Eliminar producto
+
+DELETE `/api/productos/{id}`
+
+---
+
+# Capturas de pantalla
+
+## Despliegue en Railway
+
+![Railway](img/captura2.png)
+
+---
+
+## Endpoint POST funcionando en Postman
+
+![Postman](img/captura1.png)
+
+---
+
+## Ejecución de pruebas Maven
+
+![Maven Test](img/captura3.png)
+
+---
+
+# Variables de entorno configuradas en Railway
+
+Para el despliegue de la aplicación se configuraron variables de entorno dentro de Railway.
+
+Variables utilizadas:
+
+| Variable | Descripción |
+|---|---|
+| PORT | Puerto asignado automáticamente por Railway |
+| SPRING_PROFILES_ACTIVE | Perfil activo de Spring Boot |
+| DATABASE_URL | URL de conexión a base de datos |
+| DATABASE_USERNAME | Usuario de base de datos |
+| DATABASE_PASSWORD | Contraseña de base de datos |
+
+---
+
+# Proceso de despliegue en Railway
+
+1. Se creó el proyecto en Railway.
+2. Se conectó el repositorio de GitHub.
+3. Se configuró el Dockerfile para la compilación del proyecto.
+4. Railway realizó automáticamente el build y despliegue.
+5. Se verificó el estado “Despliegue exitoso”.
+6. Se probaron los endpoints usando Postman.
+
+---
