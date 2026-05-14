@@ -1,23 +1,30 @@
-# ---- Etapa 1: compilacion con Maven ----
-FROM maven:3.9.6-eclipse-temurin-21 AS builder
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DATABASE_URL=jdbc:postgresql://db:5432/appdb
+      - DB_USER=appuser
+      - DB_PASS=apppass
+    depends_on:
+      db:
+        condition: service_healthy
 
-WORKDIR /app
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=appdb
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=apppass
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
-COPY pom.xml .
-COPY src ./src
-
-RUN mvn clean package -DskipTests
-
-# ---- Etapa 2: imagen de produccion ----
-FROM eclipse-temurin:21-jre-alpine
-
-WORKDIR /app
-
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring
-
-COPY --from=builder /app/target/*.jar app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+volumes:
+  postgres-data:
